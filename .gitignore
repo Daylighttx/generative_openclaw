@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment / secrets
+.env
+.env.local
+*.log
+
+# Test artifacts
+test-output.txt
+result.txt
+coverage/
+
+# Python
+__pycache__/
+*.pyc
+
+# Archives
+*.tar.gz
+*.tar.xz
+
+# Chat data (personal)
+her_chat.jsonl
+her_chat.txt
+wechat*.txt
+wechat*.jsonl
+
+# Session data (personal)
+agents/main/sessions/
+workspace/HEARTBEAT.md
+workspace/memory/
+qqbot/data/

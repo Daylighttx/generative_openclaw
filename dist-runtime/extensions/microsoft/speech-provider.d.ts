@@ -1,0 +1,2 @@
+import { n as isCjkDominant, r as listMicrosoftVoices, t as buildMicrosoftSpeechProvider } from "../../speech-provider-ByR4wmfx.js";
+export { buildMicrosoftSpeechProvider, isCjkDominant, listMicrosoftVoices };

@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-05-16T18:48:10.956Z",
+  "agentId": "main",
+  "agentName": "小爪",
+  "memoryCount": 1,
+  "idleThoughtCount": 1,
+  "proactiveUrgency": 0.15,
+  "shouldMessage": true,
+  "thoughtType": "none",
+  "mood": {
+    "curiosity": 0.8,
+    "sociability": 0.7,
+    "energy": 1,
+    "concern": 0.1,
+    "description": "very curious, energetic"
+  },
+  "lastInteractionAt": null,
+  "lastThoughtAt": "2026-05-16T18:48:09.990Z"
+}
