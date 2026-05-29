@@ -1,14 +1,19 @@
 # 🧠 Agent Mind — Social AI with Real Emotions
 
 <p align="center">
-  <strong>A proactive AI companion that has its own mood, memory, and personality — not just replies, but thinks and reaches out.</strong>
+  <strong>A proactive AI companion with its own mood, memory, and personality — not just replies, but thinks and reaches out.</strong>
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Proprietary-red.svg?style=for-the-badge" alt="Proprietary License"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Proprietary-red.svg?style=for-the-badge" alt="Proprietary"></a>
   <a href="#"><img src="https://img.shields.io/badge/Node-22%2B-green.svg?style=for-the-badge" alt="Node 22+"></a>
   <a href="#"><img src="https://img.shields.io/badge/Platform-QQ%20%7C%20Discord%20%7C%20Telegram-blue.svg?style=for-the-badge" alt="Platforms"></a>
+  <a href="README_CN.md"><img src="https://img.shields.io/badge/README-%E4%B8%AD%E6%96%87-red.svg?style=for-the-badge" alt="中文"></a>
 </p>
+
+---
+
+[中文文档](README_CN.md)
 
 ---
 
@@ -18,38 +23,32 @@
 
 ---
 
-**Agent Mind** 是基于 OpenClaw 框架构建的**主动社交 AI 智能体**。与传统聊天机器人不同，Agent Mind 拥有独立的思考循环——它每分钟审视自己的情绪状态、回忆最近的对话、然后自主决定：是给用户发条消息、安静反思、还是什么都不做。
+## Core Features
 
-> **不是你在跟 AI 聊天，是 AI 在跟你做朋友——它有自己的情绪、记忆、性格，会主动找你，被冷落会难过，凌晨会困，相处久了性格还会自己变。**
-
----
-
-## Core Features / 核心功能
-
-### 🎭 Real-time Emotion System / 实时情绪引擎
+### 🎭 Real-time Emotion System
 4-dimensional continuous mood values (curiosity, sociability, energy, concern) driven by 8 mathematical formulas — S-curve social desire, circadian rhythm, neglect penalty, cross-dimension coupling. Every minute, the mood evolves naturally like a real person's.
 
-### 💭 Autonomous Decision Loop / 自主决策循环
+### 💭 Autonomous Decision Loop
 Every few minutes, the thinking LLM independently evaluates mood + memory + personality and makes a decision: message, reflect, or idle. No hardcoded timers — the rhythm is driven by mood evolution.
 
-### 📝 Persona Cloning / 人格复刻
+### 📝 Persona Cloning
 Drop in a chat log (WeChat/QQ/JSON), run one command, and the LLM extracts personality traits, speaking style, quirks, and relationship dynamics — writing both the mind personality config and a SOUL.md for the chat agent.
 
-### 💔 Neglect Feedback / 被冷落反馈
+### 💔 Neglect Feedback
 If the agent messages you and you don't reply, its curiosity drops sharply — "I asked something, they ignored me, I'm losing interest." This is the social feedback loop that all other chatbots lack.
 
-### 🌙 Circadian Rhythm / 昼夜节律
+### 🌙 Circadian Rhythm
 Energy recovers during deep night (00:00-06:00), social desire is capped at midnight. The agent has a realistic daily rhythm — not an always-on machine.
 
-### 🔧 Self-Evolving Personality / 自我进化
+### 🔧 Self-Evolving Personality
 Every 12 hours, the LLM reviews its own behavior patterns and autonomously adjusts mood parameters (±20%). "I'm being too clingy" → lowers sociability curve. "I've been hurt too much" → raises neglect sensitivity.
 
-### 🚫 Anti-Repetition / 反重复
+### 🚫 Anti-Repetition
 Tracks its own last 5 proactive messages. The thinking LLM explicitly sees what it already said and is told not to repeat.
 
 ---
 
-## Architecture / 架构
+## Architecture
 
 ```
 mind-config.json  ←  Single config file for everything
@@ -59,7 +58,7 @@ mind-config.json  ←  Single config file for everything
 
 workspace/SOUL.md    ←  Chat agent identity (base prompt)
 
-双 LLM 架构:
+Dual LLM Architecture:
   Chat LLM      →  Reads SOUL.md + mood state → Replies naturally
   Thinking LLM  →  Reads personality + memories + mood → Decides to message
   Both share: same mood engine, same SQLite memory, same personality config
@@ -67,37 +66,33 @@ workspace/SOUL.md    ←  Chat agent identity (base prompt)
 
 ---
 
-## Comparison / 对比
+## Comparison
 
 | Feature | Agent Mind | ChatGPT/Doubao | Character.AI |
 |---------|:---:|:---:|:---:|
-| Proactive Messaging / 主动消息 | ✅ Mood-driven | ❌ Reactive only | ⚠️ Prompt-based |
-| Emotion System / 情绪系统 | ✅ 4D × 8 formulas | ❌ None | ⚠️ Static |
-| Neglect Feedback / 被冷落反馈 | ✅ "Ignored → sad" | ❌ | ❌ |
-| Relationship Evolution / 关系演进 | ✅ Auto-refresh | ❌ | ❌ |
-| Persona Cloning / 人格复刻 | ✅ Chat log → auto | ❌ Manual | ⚠️ Manual |
-| Self-Evolving / 自我进化 | ✅ 12h auto-tune | ❌ | ❌ |
-| Anti-Repetition / 反重复 | ✅ Tracks own words | ❌ | ❌ |
-| Circadian Rhythm / 昼夜节律 | ✅ Day/night cycle | ❌ | ❌ |
-| Multi-Platform / 多平台 | ✅ QQ/Discord/Telegram | ⚠️ Single app | ⚠️ Web |
-| Config-Driven / 全配置驱动 | ✅ One JSON | ❌ | ⚠️ |
+| Proactive Messaging | ✅ Mood-driven | ❌ Reactive only | ⚠️ Prompt-based |
+| Emotion System | ✅ 4D × 8 formulas | ❌ None | ⚠️ Static |
+| Neglect Feedback | ✅ "Ignored → sad" | ❌ | ❌ |
+| Relationship Evolution | ✅ Auto-refresh | ❌ | ❌ |
+| Persona Cloning | ✅ Chat log → auto | ❌ Manual | ⚠️ Manual |
+| Self-Evolving | ✅ 12h auto-tune | ❌ | ❌ |
+| Anti-Repetition | ✅ Tracks own words | ❌ | ❌ |
+| Circadian Rhythm | ✅ Day/night cycle | ❌ | ❌ |
+| Multi-Platform | ✅ QQ/Discord/Telegram | ⚠️ Single app | ⚠️ Web |
+| Config-Driven | ✅ One JSON | ❌ | ⚠️ |
 
 ---
 
-## Quick Deploy / 快速部署
+## Quick Deploy
 
 Runtime: **Node.js 22+** | OS: **Ubuntu 22.04+**
 
 ```bash
-# 1. Clone (private repo)
+# Clone (private repo)
 git clone git@github.com:your-org/your-repo.git .openclaw
-cd .openclaw
+cd .openclaw && pnpm install --frozen-lockfile && pnpm build
 
-# 2. Install & build
-pnpm install --frozen-lockfile
-pnpm build
-
-# 3. Configure API key
+# Configure
 cat > ~/.openclaw/mind-config.json << 'EOF'
 {
   "preset": "social",
@@ -109,7 +104,7 @@ cat > ~/.openclaw/mind-config.json << 'EOF'
 }
 EOF
 
-# 4. Start
+# Start
 sudo systemctl enable --now openclaw-gateway
 ```
 
@@ -117,62 +112,49 @@ Full guide: [DEPLOY.md](DEPLOY.md)
 
 ---
 
-## Persona Import / 人格导入
+## Persona Import
 
 ```bash
 node scripts/persona-import.mjs her_chat.jsonl \
-  --target 小宇 --user Daylight \
+  --target Name --user You \
   --update-config \
-  --api-key "YOUR_API_KEY"
+  --api-key "YOUR_KEY"
 
 sudo systemctl restart openclaw-gateway
 ```
 
-Outputs:
-- `mind-config.json` → personality + moodConfig
-- `workspace/SOUL.md` → chat agent identity
-
 ---
 
-## Monitoring / 监控
+## Monitoring
 
 ```bash
-# Real-time decisions
 journalctl -u openclaw-gateway -f | grep "LLM decision"
-
-# Full LLM prompt (thinking LLM)
 journalctl -u openclaw-gateway -f | grep "--- LLM PROMPT ---"
-
-# Mood values
-tail -f ~/.openclaw/mind/events.log | jq 'select(.event=="heartbeat_tick") | "s=\(.sociability) e=\(.energy) c=\(.curiosity)"'
-
-# Self-evolution events
-journalctl -u openclaw-gateway -f | grep "personality adapted"
+tail -f ~/.openclaw/mind/events.log | jq 'select(.event=="heartbeat_tick")'
 ```
 
 ---
 
-## Docs / 文档
+## Docs
 
-- [Mood Formulas](docs/reference/MOOD_FORMULAS.md) — Complete formula reference (8 equations)
+- [Mood Formulas](docs/reference/MOOD_FORMULAS.md) — 8 equations reference
 - [Project Report](PROJECT_REPORT.md) — Full technical report
-- [Deploy Guide](DEPLOY.md) — Deployment from scratch
+- [Deploy Guide](DEPLOY.md) — From zero to running
 
 ---
 
-## Tech Stack / 技术栈
+## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
 | Framework | OpenClaw (Node.js + TypeScript) |
 | Emotion Engine | Custom 8-formula advanceTime system |
-| Decision Engine | LLM (doubao-seed-2.0-lite / OpenAI-compatible) |
-| Storage | SQLite (better-sqlite3) + JSONL events log |
+| Decision Engine | LLM (OpenAI-compatible) |
+| Storage | SQLite + JSONL events log |
 | Messaging | QQ Bot / Telegram / Discord / Slack |
-| Config | mind-config.json — fully config-driven |
 
 ---
 
-## License / 许可
+## License
 
-Proprietary. All rights reserved. 闭源商用。
+Proprietary. All rights reserved.
