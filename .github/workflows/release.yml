@@ -1,0 +1,44 @@
+name: Build Release
+
+on:
+  push:
+    branches: [main, master]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+
+      - name: Create release package
+        run: |
+          mkdir -p release
+          tar -czf release/openclaw-release.tar.gz \
+            --exclude='node_modules/.cache' \
+            --exclude='src' --exclude='test' --exclude='.git' \
+            --exclude='*.tar.gz' --exclude='qa' --exclude='patches' \
+            --exclude='security' --exclude='skills' --exclude='docs' \
+            --exclude='apps' --exclude='extensions' --exclude='ui' \
+            --exclude='config' --exclude='git-hooks' \
+            --exclude='*.tsbuildinfo' --exclude='dist/**/*.map' \
+            openclaw.mjs package.json pnpm-lock.yaml \
+            pnpm-workspace.yaml dist/ node_modules/ \
+            scripts/persona-import.mjs
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: openclaw-release
+          path: release/openclaw-release.tar.gz
