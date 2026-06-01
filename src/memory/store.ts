@@ -178,7 +178,8 @@ export class SemanticMemoryStore {
     query += " ORDER BY created_at DESC LIMIT ? OFFSET ?";
     params.push(limit, offset);
 
-    const rows = this.db.prepare(query).all(...(params as unknown[])) as Record<string, unknown>[];
+    const stmt = this.db.prepare(query);
+    const rows = (stmt.all as (...args: unknown[]) => unknown[])(...params) as Record<string, unknown>[];
     return rows.map((row) => this.rowToMemory(row));
   }
 
