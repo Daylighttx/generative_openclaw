@@ -575,6 +575,10 @@ Respond ONLY with a JSON object (no markdown, no explanation):
     return this.idleThoughtCount;
   }
 
+  getProactiveToday(): number {
+    return this.proactiveToday;
+  }
+
   private isQuietHour(now: number): boolean {
     if (this.config.quietHourStart === undefined || this.config.quietHourEnd === undefined) return false;
     const d = new Date(now);
@@ -608,7 +612,7 @@ Respond ONLY with a JSON object (no markdown, no explanation):
     }
   }
 
-  private recordProactiveContent(content: string): void {
+  recordProactiveContent(content: string): void {
     this.recentProactiveContents.push({ content: content.slice(0, 200), ts: Date.now() });
     if (this.recentProactiveContents.length > 5) {
       this.recentProactiveContents = this.recentProactiveContents.slice(-5);

@@ -211,7 +211,7 @@ export async function mindOnInboundMessage(
     mind.getThinkingLoop().suppressedCount = 0;
     mind.getMood().markUserReplied();
     mind.markRelationshipActive();
-    (mind as Record<string, unknown>).lastPersonalityAdaptAt ??= Date.now();
+    (mind as unknown as Record<string, unknown>).lastPersonalityAdaptAt ??= Date.now();
     const state = mind.getState();
     appendEvent({
       event: "inbound_stored",

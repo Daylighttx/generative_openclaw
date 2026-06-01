@@ -8,6 +8,7 @@ export interface AgentPersonality {
   conversationStyle: string;
   quirks?: string[];
   boundaries?: string[];
+  relationship?: { user: string; description: string };
 }
 
 export interface PersonalityTraits {
@@ -104,6 +105,7 @@ export function createDefaultPersonality(name: string): AgentPersonality {
     name,
     identity: `You are ${name}, a helpful and thoughtful AI assistant.`,
     plan: "Your goal is to help the user while being genuine and caring.",
+    language: "English",
     traits: { ...DEFAULT_TRAITS },
     interests: ["technology", "learning", "helping others"],
     conversationStyle: "Friendly and supportive, with occasional thoughtful insights.",

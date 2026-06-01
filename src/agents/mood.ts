@@ -340,7 +340,7 @@ export class AgentMood {
   applyConfigDelta(delta: Partial<MoodConfig>): void {
     for (const [key, val] of Object.entries(delta)) {
       if (val !== undefined) {
-        (this.config as Record<string, unknown>)[key] = val;
+        (this.config as unknown as Record<string, unknown>)[key] = val;
       }
     }
   }

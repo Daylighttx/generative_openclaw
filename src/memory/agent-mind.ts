@@ -358,7 +358,7 @@ ${convLines}
 ${recentMems.slice(0, 10).map((m, i) => `${i + 1}. ${m.content}`).join("\n")}
 
 当前情绪: ${state.moodDescription}
-今日主动消息数: ${this.thinkingLoop.proactiveToday}
+今日主动消息数: ${this.thinkingLoop.getProactiveToday()}
 
 ## 决策要求
 
