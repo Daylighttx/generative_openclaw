@@ -42,3 +42,19 @@ jobs:
         with:
           name: openclaw-release
           path: release/openclaw-release.tar.gz
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Release ${{ github.sha }}
+          tag_name: build-${{ github.run_number }}
+          files: release/openclaw-release.tar.gz
+          body: |
+            ## ⚡ Auto-built from ${{ github.sha }}
+
+            Pre-compiled deployment package. Extract and run — no `pnpm install` or `pnpm build` needed.
+
+            ```bash
+            tar -xzf openclaw-release.tar.gz -C /home/openclaw/.openclaw/
+            sudo systemctl restart openclaw-gateway
+            ```
