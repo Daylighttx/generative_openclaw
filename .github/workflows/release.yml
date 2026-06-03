@@ -35,7 +35,7 @@ jobs:
             --exclude='config' --exclude='git-hooks' \
             --exclude='*.tsbuildinfo' --exclude='dist/**/*.map' \
             openclaw.mjs package.json pnpm-lock.yaml \
-            pnpm-workspace.yaml dist/ node_modules/ \
+            pnpm-workspace.yaml dist/ \
             scripts/persona-import.mjs
 
       - name: Upload artifact
@@ -53,9 +53,11 @@ jobs:
           body: |
             ## ⚡ Auto-built from ${{ github.sha }}
 
-            Pre-compiled deployment package. Extract and run — no `pnpm install` or `pnpm build` needed.
+            Pre-compiled deployment package (source + dist, no node_modules).
 
             ```bash
             tar -xzf openclaw-release.tar.gz -C /home/openclaw/.openclaw/
+            cd /home/openclaw/.openclaw
+            pnpm install --frozen-lockfile
             sudo systemctl restart openclaw-gateway
             ```
