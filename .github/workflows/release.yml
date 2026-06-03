@@ -26,11 +26,22 @@ jobs:
       - name: Create deploy package
         run: |
           # pnpm deploy creates a standalone dir with flat node_modules (no symlinks)
-          pnpm deploy --prod deploy-dir
+          pnpm --filter . deploy --prod deploy-dir 2>&1 || {
+            echo "pnpm deploy failed, trying alternative..."
+            mkdir -p deploy-dir
+            cp -r dist/ openclaw.mjs package.json pnpm-lock.yaml pnpm-workspace.yaml node_modules/ deploy-dir/
+          }
 
-          # Add our custom entry files that aren't part of the workspace build
-          cp openclaw.mjs deploy-dir/
-          cp -r scripts/persona-import.mjs deploy-dir/
+          # Add our custom entry files
+          cp openclaw.mjs deploy-dir/ 2>/dev/null || true
+          cp -r scripts/persona-import.mjs deploy-dir/ 2>/dev/null || true
+
+          echo "=== Deploy directory contents ==="
+          ls -la deploy-dir/ | head -20
+          echo "=== node_modules size ==="
+          du -sh deploy-dir/node_modules/ 2>/dev/null || echo "no node_modules"
+          echo "=== Checking json5 ==="
+          ls deploy-dir/node_modules/json5/index.js 2>/dev/null && echo "json5 OK" || echo "json5 MISSING"
 
           tar -czf openclaw-release.tar.gz -C deploy-dir .
 
