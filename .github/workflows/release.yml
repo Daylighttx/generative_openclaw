@@ -23,41 +23,39 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
 
-      - name: Create release package
+      - name: Create deploy package
         run: |
-          mkdir -p release
-          tar -czf release/openclaw-release.tar.gz \
-            --exclude='node_modules/.cache' \
-            --exclude='src' --exclude='test' --exclude='.git' \
-            --exclude='*.tar.gz' --exclude='qa' --exclude='patches' \
-            --exclude='security' --exclude='skills' --exclude='docs' \
-            --exclude='apps' --exclude='extensions' --exclude='ui' \
-            --exclude='config' --exclude='git-hooks' \
-            --exclude='*.tsbuildinfo' --exclude='dist/**/*.map' \
-            openclaw.mjs package.json pnpm-lock.yaml \
-            pnpm-workspace.yaml dist/ \
-            scripts/persona-import.mjs
+          mkdir deploy
+          cp -r dist/ openclaw.mjs scripts/persona-import.mjs package.json patches/ deploy/
+
+          cd deploy
+          # Use npm to create flat node_modules (no symlinks — survives tar)
+          npm install --omit=dev --ignore-scripts
+
+          # Remove npm's package-lock (keep pnpm one)
+          rm -f package-lock.json
+
+          cd ..
+          tar -czf openclaw-release.tar.gz -C deploy .
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: openclaw-release
-          path: release/openclaw-release.tar.gz
+          path: openclaw-release.tar.gz
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: Release ${{ github.sha }}
+          name: Release build-${{ github.run_number }}
           tag_name: build-${{ github.run_number }}
-          files: release/openclaw-release.tar.gz
+          files: openclaw-release.tar.gz
           body: |
-            ## ⚡ Auto-built from ${{ github.sha }}
+            ## ⚡ Pre-built release — extract and run
 
-            Pre-compiled deployment package (source + dist, no node_modules).
+            No compilation needed. No `pnpm install`. Extract → start.
 
             ```bash
             tar -xzf openclaw-release.tar.gz -C /home/openclaw/.openclaw/
-            cd /home/openclaw/.openclaw
-            pnpm install --frozen-lockfile
             sudo systemctl restart openclaw-gateway
             ```
