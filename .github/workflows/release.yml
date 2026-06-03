@@ -25,21 +25,14 @@ jobs:
 
       - name: Create deploy package
         run: |
-          mkdir deploy
-          cp -r dist/ openclaw.mjs scripts/persona-import.mjs package.json deploy/
-          # Copy patches only if they contain actual patch files
-          mkdir -p deploy/patches
-          if [ -d patches ] && ls patches/*.patch 2>/dev/null; then
-            cp patches/*.patch deploy/patches/
-          fi
+          # pnpm deploy creates a standalone dir with flat node_modules (no symlinks)
+          pnpm deploy --prod deploy-dir
 
-          cd deploy
-          # Remove pnpm field so npm install works cleanly
-          node -e "const p=require('./package.json'); delete p.packageManager; require('fs').writeFileSync('package.json', JSON.stringify(p,null,2)+'\n')"
-          npm install --omit=dev
-          rm -f package-lock.json
-          cd ..
-          tar -czf openclaw-release.tar.gz -C deploy .
+          # Add our custom entry files that aren't part of the workspace build
+          cp openclaw.mjs deploy-dir/
+          cp -r scripts/persona-import.mjs deploy-dir/
+
+          tar -czf openclaw-release.tar.gz -C deploy-dir .
 
       - name: Verify package
         run: |
