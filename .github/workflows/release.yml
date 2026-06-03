@@ -26,17 +26,26 @@ jobs:
       - name: Create deploy package
         run: |
           mkdir deploy
-          cp -r dist/ openclaw.mjs scripts/persona-import.mjs package.json patches/ deploy/
+          cp -r dist/ openclaw.mjs scripts/persona-import.mjs package.json deploy/
+          # Copy patches only if they contain actual patch files
+          mkdir -p deploy/patches
+          if [ -d patches ] && ls patches/*.patch 2>/dev/null; then
+            cp patches/*.patch deploy/patches/
+          fi
 
           cd deploy
-          # Use npm to create flat node_modules (no symlinks — survives tar)
-          npm install --omit=dev --ignore-scripts
-
-          # Remove npm's package-lock (keep pnpm one)
+          # Remove pnpm field so npm install works cleanly
+          node -e "const p=require('./package.json'); delete p.packageManager; require('fs').writeFileSync('package.json', JSON.stringify(p,null,2)+'\n')"
+          npm install --omit=dev
           rm -f package-lock.json
-
           cd ..
           tar -czf openclaw-release.tar.gz -C deploy .
+
+      - name: Verify package
+        run: |
+          tar -tzf openclaw-release.tar.gz | head -20
+          SIZE=$(du -h openclaw-release.tar.gz | cut -f1)
+          echo "Package size: $SIZE"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
