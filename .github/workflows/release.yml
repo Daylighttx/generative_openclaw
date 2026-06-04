@@ -25,24 +25,13 @@ jobs:
 
       - name: Create deploy package
         run: |
-          mkdir -p deploy-dir
-          cp -r dist/ openclaw.mjs scripts/ package.json pnpm-lock.yaml deploy-dir/
-          # tar -h follows symlinks → real files for native modules like better-sqlite3
-          tar -chf - node_modules/ | tar -xf - -C deploy-dir/
+          # -h dereferences all symlinks in one go — no intermediate copy
+          tar -czhf openclaw-release.tar.gz \
+            dist/ openclaw.mjs scripts/ package.json pnpm-lock.yaml node_modules/
 
-          echo "=== Checking key deps ==="
-          ls deploy-dir/node_modules/json5/index.js && echo "json5 OK" || echo "json5 MISSING"
-          ls deploy-dir/node_modules/better-sqlite3/lib/index.js && echo "better-sqlite3 OK" || echo "better-sqlite3 MISSING"
-          echo "=== Package size ==="
-          du -sh deploy-dir/
-
-          tar -czf openclaw-release.tar.gz -C deploy-dir .
-
-      - name: Verify package
-        run: |
-          tar -tzf openclaw-release.tar.gz | head -20
-          SIZE=$(du -h openclaw-release.tar.gz | cut -f1)
-          echo "Package size: $SIZE"
+          echo "=== Verifying inside tar ==="
+          tar -tzf openclaw-release.tar.gz | grep -E "(json5/index|better-sqlite3/lib/index)" | head -4
+          echo "Package size: $(du -h openclaw-release.tar.gz | cut -f1)"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
