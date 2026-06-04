@@ -27,8 +27,8 @@ jobs:
         run: |
           mkdir -p deploy-dir
           cp -r dist/ openclaw.mjs scripts/ package.json pnpm-lock.yaml deploy-dir/
-          # -L dereferences symlinks → copies real files
-          cp -rL node_modules/ deploy-dir/
+          # tar -h follows symlinks → real files for native modules like better-sqlite3
+          tar -chf - node_modules/ | tar -xf - -C deploy-dir/
 
           echo "=== Checking key deps ==="
           ls deploy-dir/node_modules/json5/index.js && echo "json5 OK" || echo "json5 MISSING"
