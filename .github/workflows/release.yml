@@ -25,23 +25,16 @@ jobs:
 
       - name: Create deploy package
         run: |
-          # pnpm deploy creates a standalone dir with flat node_modules (no symlinks)
-          pnpm --filter . deploy --prod deploy-dir 2>&1 || {
-            echo "pnpm deploy failed, trying alternative..."
-            mkdir -p deploy-dir
-            cp -r dist/ openclaw.mjs package.json pnpm-lock.yaml pnpm-workspace.yaml node_modules/ deploy-dir/
-          }
+          mkdir -p deploy-dir
+          cp -r dist/ openclaw.mjs scripts/ package.json pnpm-lock.yaml deploy-dir/
+          # -L dereferences symlinks → copies real files
+          cp -rL node_modules/ deploy-dir/
 
-          # Add our custom entry files
-          cp openclaw.mjs deploy-dir/ 2>/dev/null || true
-          cp -r scripts/persona-import.mjs deploy-dir/ 2>/dev/null || true
-
-          echo "=== Deploy directory contents ==="
-          ls -la deploy-dir/ | head -20
-          echo "=== node_modules size ==="
-          du -sh deploy-dir/node_modules/ 2>/dev/null || echo "no node_modules"
-          echo "=== Checking json5 ==="
-          ls deploy-dir/node_modules/json5/index.js 2>/dev/null && echo "json5 OK" || echo "json5 MISSING"
+          echo "=== Checking key deps ==="
+          ls deploy-dir/node_modules/json5/index.js && echo "json5 OK" || echo "json5 MISSING"
+          ls deploy-dir/node_modules/better-sqlite3/lib/index.js && echo "better-sqlite3 OK" || echo "better-sqlite3 MISSING"
+          echo "=== Package size ==="
+          du -sh deploy-dir/
 
           tar -czf openclaw-release.tar.gz -C deploy-dir .
 
