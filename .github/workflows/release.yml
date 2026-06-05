@@ -24,9 +24,20 @@ jobs:
 
       - name: Install dependencies (flat layout, no symlinks)
         run: |
+          rm -f .npmrc
           echo "node-linker=hoisted" > .npmrc
           echo "shamefully-hoist=true" >> .npmrc
+          cat .npmrc
           pnpm install --frozen-lockfile
+
+      - name: Diagnose node_modules
+        run: |
+          echo "=== Where is json5? ==="
+          find node_modules -name "index.js" -path "*/json5/*" 2>/dev/null | head -5 || echo "NOT FOUND"
+          echo "=== Where is better-sqlite3? ==="
+          find node_modules -path "*/better-sqlite3/lib/index.js" 2>/dev/null | head -5 || echo "NOT FOUND"
+          echo "=== node_modules top-level count ==="
+          ls node_modules/ 2>/dev/null | wc -l
 
       - name: Build
         run: pnpm build
