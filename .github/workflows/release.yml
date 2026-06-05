@@ -1,36 +1,41 @@
 name: Build Release
-
 on:
   push:
-    branches: [main, master]
-
-permissions:
-  contents: write
+    branches: [main]
+    paths-ignore:
+      - 'README.md'
+      - 'README_CN.md'
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v6
+      - uses: pnpm/action-setup@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
 
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
-
-      - name: Create deploy package
+      - name: Install dependencies (flat layout, no symlinks)
         run: |
-          # -h dereferences all symlinks in one go — no intermediate copy
-          tar -czhf openclaw-release.tar.gz \
+          echo "node-linker=hoisted" > .npmrc
+          echo "shamefully-hoist=true" >> .npmrc
+          pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Create deploy package (flat node_modules, no symlinks needed)
+        run: |
+          tar -czf openclaw-release.tar.gz \
             dist/ openclaw.mjs scripts/ package.json pnpm-lock.yaml node_modules/
 
-          echo "=== Verifying inside tar ==="
-          tar -tzf openclaw-release.tar.gz | grep -E "(json5/index|better-sqlite3/lib/index)" | head -4
+          echo "=== Verifying key deps ==="
+          tar -tzf openclaw-release.tar.gz | grep "node_modules/json5/index" || echo "json5 MISSING"
+          tar -tzf openclaw-release.tar.gz | grep "node_modules/better-sqlite3/lib/index" || echo "better-sqlite3 MISSING"
           echo "Package size: $(du -h openclaw-release.tar.gz | cut -f1)"
 
       - name: Upload artifact
@@ -39,18 +44,9 @@ jobs:
           name: openclaw-release
           path: openclaw-release.tar.gz
 
-      - name: Create GitHub Release
+      - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          name: Release build-${{ github.run_number }}
-          tag_name: build-${{ github.run_number }}
+          tag_name: release-${{ github.run_number }}
+          name: Release #${{ github.run_number }}
           files: openclaw-release.tar.gz
-          body: |
-            ## ⚡ Pre-built release — extract and run
-
-            No compilation needed. No `pnpm install`. Extract → start.
-
-            ```bash
-            tar -xzf openclaw-release.tar.gz -C /home/openclaw/.openclaw/
-            sudo systemctl restart openclaw-gateway
-            ```
