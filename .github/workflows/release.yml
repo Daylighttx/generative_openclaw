@@ -63,7 +63,7 @@ jobs:
           path: openclaw-release.tar.gz
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: release-${{ github.run_number }}
           name: Release #${{ github.run_number }}
