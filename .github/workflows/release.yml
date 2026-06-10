@@ -49,11 +49,13 @@ jobs:
       - name: Create deploy package (flat node_modules, no symlinks needed)
         run: |
           tar -czf openclaw-release.tar.gz \
-            dist/ openclaw.mjs scripts/ package.json pnpm-lock.yaml node_modules/
+            dist/ openclaw.mjs scripts/ package.json pnpm-lock.yaml node_modules/ docs/ patches/
 
           echo "=== Verifying key deps ==="
           tar -tzf openclaw-release.tar.gz | grep "node_modules/json5/index" || echo "json5 MISSING"
           tar -tzf openclaw-release.tar.gz | grep "node_modules/better-sqlite3/lib/index" || echo "better-sqlite3 MISSING"
+          echo "=== Verifying template files ==="
+          tar -tzf openclaw-release.tar.gz | grep "docs/reference/templates" | head -14
           echo "Package size: $(du -h openclaw-release.tar.gz | cut -f1)"
 
       - name: Upload artifact
