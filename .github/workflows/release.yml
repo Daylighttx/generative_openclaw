@@ -1,10 +1,13 @@
 name: Build Release
+
 on:
   push:
     branches: [main]
     paths-ignore:
       - 'README.md'
       - 'README_CN.md'
+      - 'DEPLOY.md'
+      - 'PROJECT_REPORT.md'
 
 jobs:
   release:
@@ -27,35 +30,30 @@ jobs:
           rm -f .npmrc
           echo "node-linker=hoisted" > .npmrc
           echo "shamefully-hoist=true" >> .npmrc
-          cat .npmrc
           pnpm install --frozen-lockfile
 
-      - name: Diagnose node_modules
+      - name: Verify essential deps
         run: |
-          echo "=== Where is json5? ==="
-          find node_modules -name "index.js" -path "*/json5/*" 2>/dev/null | head -5 || echo "NOT FOUND"
-          echo "=== Where is better-sqlite3? ==="
-          find node_modules -path "*/better-sqlite3/*.js" 2>/dev/null | head -5 || echo "NOT FOUND"
-          find node_modules -name "*.node" -path "*better*" 2>/dev/null | head -5 || echo "no .node binary"
-          echo "=== Does better-sqlite3 dir exist? ==="
-          ls -d node_modules/better-sqlite3 2>/dev/null || echo "DIR NOT FOUND"
-          find node_modules -name "better-sqlite3" -type d 2>/dev/null | head -5 || echo "NO BETTER_SQLITE3 DIR"
-          echo "=== node_modules top-level count ==="
-          ls node_modules/ 2>/dev/null | wc -l
+          echo "=== json5 ==="
+          find node_modules/json5 -name "index.*" -maxdepth 1 | head -2 || echo "MISSING"
+          echo "=== jiti (root-alias dep) ==="
+          find node_modules/jiti -name "*.js" -maxdepth 1 | head -2 || echo "MISSING"
 
       - name: Build
         run: pnpm build
 
-      - name: Create deploy package (flat node_modules, no symlinks needed)
+      - name: Create deploy package
         run: |
           tar -czf openclaw-release.tar.gz \
             dist/ openclaw.mjs scripts/ package.json pnpm-lock.yaml node_modules/ docs/ patches/
 
           echo "=== Verifying key deps ==="
-          tar -tzf openclaw-release.tar.gz | grep "node_modules/json5/index" || echo "json5 MISSING"
-          tar -tzf openclaw-release.tar.gz | grep "node_modules/better-sqlite3/lib/index" || echo "better-sqlite3 MISSING"
+          tar -tzf openclaw-release.tar.gz | grep "node_modules/json5/index" | head -1 || echo "json5 MISSING"
+          tar -tzf openclaw-release.tar.gz | grep "node_modules/jiti/lib" | head -1 || echo "jiti MISSING"
           echo "=== Verifying template files ==="
-          tar -tzf openclaw-release.tar.gz | grep "docs/reference/templates" | head -14
+          tar -tzf openclaw-release.tar.gz | grep "docs/reference/templates" | head -14 || echo "templates MISSING"
+          echo "=== Verifying patches ==="
+          tar -tzf openclaw-release.tar.gz | grep "patches/" | head -5 || echo "patches MISSING"
           echo "Package size: $(du -h openclaw-release.tar.gz | cut -f1)"
 
       - name: Upload artifact
