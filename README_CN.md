@@ -116,7 +116,7 @@ sudo systemctl enable --now openclaw-gateway
 
 ```bash
 node scripts/persona-import.mjs her_chat.jsonl \
-  --target 小宇 --user Daylight \
+  --target CHAR_NAME --user USER_NAME \
   --update-config \
   --api-key "YOUR_KEY"
 

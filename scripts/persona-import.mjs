@@ -27,8 +27,8 @@ Options:
   --help, -h          Show this message
 
 Examples:
-  node persona-import.mjs export.jsonl --target 小雨 --user Daylight
-  node persona-import.mjs wechat.txt --target "小王" --user "我" \\
+  node persona-import.mjs export.jsonl --target CHAR_NAME --user USER_NAME
+  node persona-import.mjs wechat.txt --target "SOMEONE" --user "我" \\
     --relation "她是我最好的朋友" --output alice-persona.json
 `);
 }
@@ -101,7 +101,7 @@ function buildMemoryPrompt(rawChat, targetName, userName) {
 - importance=8~9: 核心价值观表达、重要承诺、关键生活事件
 - importance=5~7: 性格特征体现、常用表达方式、典型互动模式
 - importance=1~4: 日常闲聊中有记忆点的片段
-- type=fact: 客观事实（如"小宇不喜欢吃荆芥"）
+- type=fact: 客观事实（如"CHAR_NAME不喜欢吃荆芥"）
 - type=memory: 共同经历或有情感价值的时刻
 - type=conversation: 有代表性的对话片段
 

@@ -128,8 +128,8 @@ AI 在任一平台上完成"思考→决策→发消息"的完整链路。
 
 ```bash
 node persona-import.mjs her_wechat.jsonl \
-  --target 小宇 \
-  --user Daylight \
+  --target CHAR_NAME \
+  --user USER_NAME \
   --relation "她是我生命中很重要的人"
 ```
 

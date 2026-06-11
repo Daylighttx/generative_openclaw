@@ -13,7 +13,7 @@
 ### 设计
 
 ```
-persona-import.mjs --memory-import --target 小宇 --user Daylight
+persona-import.mjs --memory-import --target CHAR_NAME --user USER_NAME
   │
   ├─ 1. 解析聊天记录（复用现有 readChatFile）
   ├─ 2. 发送给 LLM: "提取 20-30 条最有代表性的对话摘要"
@@ -36,8 +36,8 @@ persona-import.mjs --memory-import --target 小宇 --user Daylight
 - importance=8~9: TA表达的核心价值观、重要承诺、关键事件
 - importance=5~7: TA的性格特征体现、常用表达、典型互动
 - importance=1~4: 日常闲聊中有记忆点的小片段
-- type=fact: 客观事实（如"小宇不喜欢荆芥"）
-- type=memory: 共同经历（如"她和小宇一起去买过电脑"）
+- type=fact: 客观事实（如"CHAR_NAME不喜欢荆芥"）
+- type=memory: 共同经历（如"她和CHAR_NAME一起去买过电脑"）
 - type=conversation: 代表性对话片段
 
 聊天记录:
@@ -50,10 +50,10 @@ persona-import.mjs --memory-import --target 小宇 --user Daylight
 
 ```json
 [
-  {"content":"小宇不喜欢荆芥的味道","importance":6,"type":"fact"},
-  {"content":"小宇说她在看剧时被问在干嘛","importance":3,"type":"conversation"},
-  {"content":"小宇爱发哈哈哈和表情包","importance":4,"type":"memory"},
-  {"content":"小宇对电子产品很感兴趣，在买电脑时很兴奋","importance":5,"type":"memory"}
+  {"content":"CHAR_NAME不喜欢荆芥的味道","importance":6,"type":"fact"},
+  {"content":"CHAR_NAME说她在看剧时被问在干嘛","importance":3,"type":"conversation"},
+  {"content":"CHAR_NAME爱发哈哈哈和表情包","importance":4,"type":"memory"},
+  {"content":"CHAR_NAME对电子产品很感兴趣，在买电脑时很兴奋","importance":5,"type":"memory"}
 ]
 ```
 
@@ -80,13 +80,13 @@ for (const mem of memories) {
 ```bash
 # 追加: 导入记忆
 node persona-import.mjs her_chat.jsonl \
-  --target 小宇 --user Daylight \
+  --target CHAR_NAME --user USER_NAME \
   --memory-import \
   --memory-db /home/openclaw/.openclaw/mind/main.db
 
 # 或同时做人设+记忆
 node persona-import.mjs her_chat.jsonl \
-  --target 小宇 --user Daylight \
+  --target CHAR_NAME --user USER_NAME \
   --persona --output /tmp/xiaoyu-persona.json \
   --memory-import
 ```
@@ -155,14 +155,14 @@ Respond with JSON:
 ### 示例效果
 
 ```
-原来: "小宇和我是很好的朋友，经常一起聊生活、开玩笑"
+原来: "CHAR_NAME和我是很好的朋友，经常一起聊生活、开玩笑"
 
-吵架后 → "小宇和我最近有点闹矛盾，感觉她对我有点冷淡了，
+吵架后 → "CHAR_NAME和我最近有点闹矛盾，感觉她对我有点冷淡了，
           我想跟她好好聊聊但又不知道怎么说"
 
-和好后 → "小宇和我是无话不谈的好朋友，我们会吵架但总会和好"
+和好后 → "CHAR_NAME和我是无话不谈的好朋友，我们会吵架但总会和好"
 
-很久没聊 → "小宇是我一个老朋友了，我们好久没聊天了，有点想念"
+很久没聊 → "CHAR_NAME是我一个老朋友了，我们好久没聊天了，有点想念"
 ```
 
 ### 改动范围

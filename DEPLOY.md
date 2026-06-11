@@ -55,7 +55,7 @@ useradd -m -s /bin/bash openclaw
 # 方式 A: 从 GitHub Release 下载
 TOKEN="ghp_xxx"  # GitHub personal access token
 ARTIFACT_URL=$(curl -s -H "Authorization: Bearer $TOKEN" \
-  "https://api.github.com/repos/Daylighttx/generative_openclaw/actions/artifacts?per_page=1" \
+  "https://api.github.com/repos/USER_NAMEtx/generative_openclaw/actions/artifacts?per_page=1" \
   | python3 -c "import sys,json; print(json.load(sys.stdin)['artifacts'][0]['archive_download_url']")
 curl -L -H "Authorization: Bearer $TOKEN" "$ARTIFACT_URL" -o /tmp/openclaw-release.zip
 unzip /tmp/openclaw-release.zip -d /tmp/
@@ -84,7 +84,7 @@ User=openclaw
 WorkingDirectory=/home/openclaw/.openclaw
 Environment=NODE_ENV=production
 Environment=OPENCLAW_HOME=/home/openclaw
-Environment=MIND_LLM_API_KEY=c109d37a-3109-4188-bb1b-0333d781da38
+Environment=MIND_LLM_API_KEY=YOUR_API_KEY
 ExecStart=/usr/bin/node /home/openclaw/.openclaw/openclaw.mjs gateway run --port 18789 --allow-unconfigured
 Restart=always
 RestartSec=5
@@ -121,7 +121,7 @@ scp her_chat.jsonl root@your-server:/tmp/
 # 导入
 cd /home/openclaw/.openclaw
 sudo -u openclaw node scripts/persona-import.mjs /tmp/her_chat.jsonl \
-  --target 小宇 --user Daylight \
+  --target CHAR_NAME --user USER_NAME \
   --update-config \
   --api-key "your-api-key"
 

@@ -124,7 +124,7 @@ energy < 0.25 && concern > 0.6 → soc 被拉向 0.2 + cur 被拉向 ≥0.6（�
 
 ```bash
 node persona-import.mjs chat.jsonl \
-  --target 小宇 --user Daylight \
+  --target CHAR_NAME --user USER_NAME \
   --update-config
 ```
 

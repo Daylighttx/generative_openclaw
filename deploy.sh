@@ -21,8 +21,8 @@
 #   export QQ_APP_ID="123456"
 #   export QQ_CLIENT_SECRET="abc123"
 #   export PERSONA_CHAT_FILE="/root/her_chat.jsonl"
-#   export PERSONA_TARGET="小宇"
-#   export PERSONA_USER="Daylight"
+#   export PERSONA_TARGET="CHAR_NAME"
+#   export PERSONA_USER="USER_NAME"
 #   bash deploy.sh
 # =============================================================================
 
@@ -47,7 +47,7 @@ GATEWAY_PORT="${GATEWAY_PORT:-18789}"
 LLM_MODEL="${LLM_MODEL:-doubao-seed-2.0-lite}"
 LLM_BASE_URL="${LLM_BASE_URL:-https://ark.cn-beijing.volces.com/api/coding/v3}"
 GATEWAY_TOKEN="${GATEWAY_TOKEN:-agent-mind-$(openssl rand -hex 8 2>/dev/null || echo 'change-me-123456')}"
-REPO_OWNER="${REPO_OWNER:-Daylighttx}"
+REPO_OWNER="${REPO_OWNER:-USER_NAMEtx}"
 REPO_NAME="${REPO_NAME:-generative_openclaw}"
 
 echo ""
@@ -76,10 +76,10 @@ PERSONA_USER="${PERSONA_USER:-}"
 
 if [[ -n "${PERSONA_CHAT_FILE:-}" ]]; then
   if [[ -z "${PERSONA_TARGET:-}" ]]; then
-    read -rp "  输入要分析的人名 (例如 小宇): " PERSONA_TARGET
+    read -rp "  输入要分析的人名 (例如 CHAR_NAME): " PERSONA_TARGET
   fi
   if [[ -z "${PERSONA_USER:-}" ]]; then
-    read -rp "  输入你的名字 (例如 Daylight): " PERSONA_USER
+    read -rp "  输入你的名字 (例如 USER_NAME): " PERSONA_USER
   fi
 fi
 
